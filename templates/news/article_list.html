@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <title>Новини</title>
+</head>
+<body>
+    <main>
+        <h1>Новини</h1>
+
+        <form method="get" action="{% url 'news:article_list' %}">
+            <input
+                type="search"
+                name="q"
+                value="{{ query }}"
+                placeholder="Търси по заглавие или съдържание"
+            >
+            <button type="submit">Търси</button>
+        </form>
+
+        <p><a href="{% url 'news:article_create' %}">Добави новина</a></p>
+
+        <h2>Категории</h2>
+        <p><a href="{% url 'news:article_list' %}">Всички новини</a></p>
+        {% for category in categories %}
+            <a href="?category={{ category.id }}">{{ category.name }}</a>
+        {% empty %}
+            <p>Няма категории.</p>
+        {% endfor %}
+
+        <h2>Тагове</h2>
+        {% for tag in tags %}
+            <a href="?tag={{ tag.id }}">{{ tag.name }}</a>
+        {% empty %}
+            <p>Няма тагове.</p>
+        {% endfor %}
+
+        {% for article in articles %}
+            <article>
+                <h2>
+                    <a href="{% url 'news:article_detail' article.id %}">
+                        {{ article.title }}
+                    </a>
+                </h2>
+
+                <p>Автор: {{ article.author_name }}</p>
+                <p>Категория: {{ article.category.name }}</p>
+
+                <p>
+                    Тагове:
+                    {% for tag in article.tags.all %}
+                        {{ tag.name }}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        няма
+                    {% endfor %}
+                </p>
+
+                <p>{{ article.content|truncatewords:30 }}</p>
+                <small>{{ article.created_at|date:"d.m.Y H:i" }}</small>
+            </article>
+            <hr>
+        {% empty %}
+            <p>Все още няма новини.</p>
+        {% endfor %}
+    </main>
+</body>
+</html>

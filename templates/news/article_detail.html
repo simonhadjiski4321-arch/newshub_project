@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ article.title }}</title>
+</head>
+<body>
+    <main>
+        <p><a href="{% url 'news:article_list' %}">← Към новините</a></p>
+        <article>
+            <h1>{{ article.title }}</h1>
+            <p>Автор: {{ article.author_name }}</p>
+            <p>{{ article.created_at|date:"d.m.Y H:i" }}</p>
+            <div>{{ article.content|linebreaks }}</div>
+        </article>
+
+        <p>Категория: {{ article.category.name }}</p>
+
+        <p>
+            Тагове:
+            {% for tag in article.tags.all %}
+                <span>{{ tag.name }}</span>{% if not forloop.last %}, {% endif %}
+            {% empty %}
+                <span>Няма добавени тагове.</span>
+            {% endfor %}
+        </p>
+
+        <hr>
+
+        <h2>Коментари</h2>
+
+        {% for comment in article.comments.all %}
+            <section>
+                <strong>{{ comment.author_name }}</strong>
+                <small>{{ comment.created_at|date:"d.m.Y H:i" }}</small>
+                <p>{{ comment.content|linebreaks }}</p>
+            </section>
+        {% empty %}
+            <p>Все още няма коментари.</p>
+        {% endfor %}
+
+        <hr>
+
+        <h2>Добави коментар</h2>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Изпрати коментара</button>
+        </form>
+    </main>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <title>Добави новина</title>
+</head>
+<body>
+    <main>
+        <p><a href="{% url 'news:article_list' %}">← Към новините</a></p>
+
+        <h1>Добави новина</h1>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Запази новината</button>
+        </form>
+    </main>
+</body>
+</html>
