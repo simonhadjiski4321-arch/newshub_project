@@ -9,6 +9,8 @@ from catalog.models import Category, Tag
 
 from django.db.models import Q
 
+from comments.models import Comment
+
 
 def article_list(request):
     articles = Article.objects.all().order_by("-created_at")
@@ -49,8 +51,23 @@ def article_detail(request, article_id):
     if request.method == "POST" and form.is_valid():
         comment = form.save(commit=False)
         comment.article = article
+
+        parent_comment_id = request.POST.get("parent_comment_id")
+        if parent_comment_id:
+            comment.parent_comment = get_object_or_404(
+                Comment,
+                id=parent_comment_id,
+                article=article,
+            )
+
         comment.save()
         return redirect(request.path)
+
+    comments = (
+        article.comments
+        .filter(parent_comment__isnull=True)
+        .prefetch_related("replies")
+    )
 
     return render(
         request,
@@ -58,6 +75,7 @@ def article_detail(request, article_id):
         {
             "article": article,
             "form": form,
+            "comments": comments,
         },
     )
 
@@ -71,5 +89,41 @@ def article_create(request):
     return render(
         request,
         "news/article_form.html",
-        {"form": form},
+        {
+            "form": form,
+            "form_title": "Добави новина",
+            "button_text": "Запази новината",
+        },
+    )
+
+def article_update(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+    form = ArticleForm(request.POST or None, instance=article)
+
+    if request.method == "POST" and form.is_valid():
+        article = form.save()
+        return redirect("news:article_detail", article_id=article.id)
+
+    return render(
+        request,
+        "news/article_form.html",
+        {
+            "form": form,
+            "form_title": "Редактирай новина",
+            "button_text": "Запази промените",
+        },
+    )
+
+
+def article_delete(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+
+    if request.method == "POST":
+        article.delete()
+        return redirect("news:article_list")
+
+    return render(
+        request,
+        "news/article_confirm_delete.html",
+        {"article": article},
     )

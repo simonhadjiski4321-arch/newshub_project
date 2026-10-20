@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}NewsHub{% endblock %}</title>
+    <style>
+        body {
+            margin: 0;
+            background: #f4f6f8;
+            color: #222;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            padding: 16px 8%;
+            background: #17324d;
+        }
+
+        header a {
+            margin-right: 20px;
+            color: white;
+            text-decoration: none;
+        }
+
+        header .brand {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        main {
+            max-width: 850px;
+            margin: 30px auto;
+            padding: 0 18px;
+        }
+
+        article, .panel {
+            margin: 18px 0;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 2px 8px #00000012;
+        }
+
+        a {
+            color: #1769aa;
+        }
+
+        button {
+            padding: 9px 16px;
+            border: 0;
+            border-radius: 5px;
+            background: #1769aa;
+            color: white;
+            cursor: pointer;
+        }
+
+        input, textarea, select {
+            max-width: 100%;
+            padding: 8px;
+        }
+
+        footer {
+            padding: 20px;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a class="brand" href="{% url 'news:article_list' %}">NewsHub</a>
+        <a href="{% url 'news:article_list' %}">Новини</a>
+        <a href="{% url 'news:article_create' %}">Добави новина</a>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>NewsHub</footer>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Изтрий новина | NewsHub{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <h1>Изтриване на новина</h1>
+    <p>Сигурен ли си, че искаш да изтриеш „{{ article.title }}“?</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Да, изтрий</button>
+    </form>
+
+    <p>
+        <a href="{% url 'news:article_detail' article.id %}">Отказ</a>
+    </p>
+</section>
+{% endblock %}

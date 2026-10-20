@@ -1,67 +1,64 @@
-<!DOCTYPE html>
-<html lang="bg">
-<head>
-    <meta charset="UTF-8">
-    <title>Новини</title>
-</head>
-<body>
-    <main>
-        <h1>Новини</h1>
+{% extends "base.html" %}
 
-        <form method="get" action="{% url 'news:article_list' %}">
-            <input
-                type="search"
-                name="q"
-                value="{{ query }}"
-                placeholder="Търси по заглавие или съдържание"
-            >
-            <button type="submit">Търси</button>
-        </form>
+{% block title %}Новини | NewsHub{% endblock %}
 
-        <p><a href="{% url 'news:article_create' %}">Добави новина</a></p>
+{% block content %}
+<h1>Новини</h1>
 
-        <h2>Категории</h2>
-        <p><a href="{% url 'news:article_list' %}">Всички новини</a></p>
-        {% for category in categories %}
-            <a href="?category={{ category.id }}">{{ category.name }}</a>
-        {% empty %}
-            <p>Няма категории.</p>
-        {% endfor %}
+<form method="get" action="{% url 'news:article_list' %}" class="panel">
+    <input
+        type="search"
+        name="q"
+        value="{{ query }}"
+        placeholder="Търси по заглавие или съдържание"
+    >
+    <button type="submit">Търси</button>
+</form>
 
-        <h2>Тагове</h2>
-        {% for tag in tags %}
-            <a href="?tag={{ tag.id }}">{{ tag.name }}</a>
-        {% empty %}
-            <p>Няма тагове.</p>
-        {% endfor %}
+<section class="panel">
+    <h2>Категории</h2>
+    <p><a href="{% url 'news:article_list' %}">Всички новини</a></p>
+    {% for category in categories %}
+        <a href="?category={{ category.id }}">{{ category.name }}</a>
+    {% empty %}
+        <p>Няма категории.</p>
+    {% endfor %}
 
-        {% for article in articles %}
-            <article>
-                <h2>
-                    <a href="{% url 'news:article_detail' article.id %}">
-                        {{ article.title }}
-                    </a>
-                </h2>
+    <h2>Тагове</h2>
+    {% for tag in tags %}
+        <a href="?tag={{ tag.id }}">{{ tag.name }}</a>
+    {% empty %}
+        <p>Няма тагове.</p>
+    {% endfor %}
+</section>
 
-                <p>Автор: {{ article.author_name }}</p>
-                <p>Категория: {{ article.category.name }}</p>
+{% for article in articles %}
+    <article>
+        <h2>
+            <a href="{% url 'news:article_detail' article.id %}">
+                {{ article.title }}
+            </a>
+        </h2>
 
-                <p>
-                    Тагове:
-                    {% for tag in article.tags.all %}
-                        {{ tag.name }}{% if not forloop.last %}, {% endif %}
-                    {% empty %}
-                        няма
-                    {% endfor %}
-                </p>
-
-                <p>{{ article.content|truncatewords:30 }}</p>
-                <small>{{ article.created_at|date:"d.m.Y H:i" }}</small>
-            </article>
-            <hr>
-        {% empty %}
-            <p>Все още няма новини.</p>
-        {% endfor %}
-    </main>
-</body>
-</html>
+        <p>Автор: {{ article.author_name }}</p>
+        <p>
+            Категория:
+            <a href="?category={{ article.category.id }}">
+                {{ article.category.name }}
+            </a>
+        </p>
+        <p>
+            Тагове:
+            {% for tag in article.tags.all %}
+                <a href="?tag={{ tag.id }}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+            {% empty %}
+                няма
+            {% endfor %}
+        </p>
+        <p>{{ article.content|truncatewords:30 }}</p>
+        <small>{{ article.created_at|date:"d.m.Y H:i" }}</small>
+    </article>
+{% empty %}
+    <p class="panel">Няма новини, които да отговарят на търсенето.</p>
+{% endfor %}
+{% endblock %}

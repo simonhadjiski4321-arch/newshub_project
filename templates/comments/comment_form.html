@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Редактирай коментар | NewsHub{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <h1>Редактирай коментар</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Запази промените</button>
+    </form>
+
+    <p>
+        <a href="{% url 'news:article_detail' comment.article_id %}">
+            Отказ
+        </a>
+    </p>
+</section>
+{% endblock %}

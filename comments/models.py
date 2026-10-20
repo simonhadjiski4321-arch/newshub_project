@@ -7,6 +7,16 @@ class Comment(models.Model):
         related_name="comments",
         verbose_name="Новина"
     )
+
+    parent_comment = models.ForeignKey(
+        "self",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="replies",
+        verbose_name="Отговор на"
+    )
+
     author_name = models.CharField(
         max_length=80,
         verbose_name="Име"

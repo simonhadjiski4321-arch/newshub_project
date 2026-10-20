@@ -1,53 +1,81 @@
-<!DOCTYPE html>
-<html lang="bg">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ article.title }}</title>
-</head>
-<body>
-    <main>
-        <p><a href="{% url 'news:article_list' %}">← Към новините</a></p>
-        <article>
-            <h1>{{ article.title }}</h1>
-            <p>Автор: {{ article.author_name }}</p>
-            <p>{{ article.created_at|date:"d.m.Y H:i" }}</p>
-            <div>{{ article.content|linebreaks }}</div>
-        </article>
+{% extends "base.html" %}
 
-        <p>Категория: {{ article.category.name }}</p>
+{% block title %}{{ article.title }} | NewsHub{% endblock %}
 
-        <p>
-            Тагове:
-            {% for tag in article.tags.all %}
-                <span>{{ tag.name }}</span>{% if not forloop.last %}, {% endif %}
-            {% empty %}
-                <span>Няма добавени тагове.</span>
-            {% endfor %}
-        </p>
+{% block content %}
+<p><a href="{% url 'news:article_list' %}">← Към новините</a></p>
 
-        <hr>
+<article>
+    <h1>{{ article.title }}</h1>
+    <p>Автор: {{ article.author_name }}</p>
+    <p>Категория: {{ article.category.name }}</p>
+    <p>{{ article.created_at|date:"d.m.Y H:i" }}</p>
+    <div>{{ article.content|linebreaks }}</div>
 
-        <h2>Коментари</h2>
-
-        {% for comment in article.comments.all %}
-            <section>
-                <strong>{{ comment.author_name }}</strong>
-                <small>{{ comment.created_at|date:"d.m.Y H:i" }}</small>
-                <p>{{ comment.content|linebreaks }}</p>
-            </section>
+    <p>
+        Тагове:
+        {% for tag in article.tags.all %}
+            {{ tag.name }}{% if not forloop.last %}, {% endif %}
         {% empty %}
-            <p>Все още няма коментари.</p>
+            няма
         {% endfor %}
+    </p>
+</article>
 
-        <hr>
+<section class="panel">
+    <a href="{% url 'news:article_update' article.id %}">Редактирай новината</a>
+    |
+    <a href="{% url 'news:article_delete' article.id %}">Изтрий новината</a>
+</section>
 
-        <h2>Добави коментар</h2>
+<section class="panel">
+    <h2>Коментари</h2>
 
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Изпрати коментара</button>
-        </form>
-    </main>
-</body>
-</html>
+    {% for comment in comments %}
+        <div>
+            <strong>{{ comment.author_name }}</strong>
+            <small>{{ comment.created_at|date:"d.m.Y H:i" }}</small>
+            <p>{{ comment.content|linebreaks }}</p>
+
+            <p>
+                <a href="{% url 'comments:comment_update' comment.id %}">Редактирай</a>
+                |
+                <a href="{% url 'comments:comment_delete' comment.id %}">Изтрий</a>
+            </p>
+
+            {% for reply in comment.replies.all %}
+                <div class="panel" style="margin-left: 24px;">
+                    <strong>{{ reply.author_name }}</strong>
+                    <small>{{ reply.created_at|date:"d.m.Y H:i" }}</small>
+                    <p>{{ reply.content|linebreaks }}</p>
+
+                    <p>
+                        <a href="{% url 'comments:comment_update' reply.id %}">Редактирай</a>
+                        |
+                        <a href="{% url 'comments:comment_delete' reply.id %}">Изтрий</a>
+                    </p>
+                </div>
+            {% endfor %}
+
+            <form method="post" class="panel">
+                {% csrf_token %}
+                <input type="hidden" name="parent_comment_id" value="{{ comment.id }}">
+                <h3>Отговори на {{ comment.author_name }}</h3>
+                {{ form.as_p }}
+                <button type="submit">Изпрати отговор</button>
+            </form>
+        </div>
+    {% empty %}
+        <p>Все още няма коментари.</p>
+    {% endfor %}
+</section>
+
+<section class="panel">
+    <h2>Добави коментар</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Изпрати коментара</button>
+    </form>
+</section>
+{% endblock %}
