@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Тагове | NewsHub{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <h1>Тагове</h1>
+    <p><a href="{% url 'catalog:tag_create' %}">Добави таг</a></p>
+
+    {% for tag in tags %}
+        <p>{{ tag.name }}</p>
+    {% empty %}
+        <p>Все още няма тагове.</p>
+    {% endfor %}
+</section>
+{% endblock %}

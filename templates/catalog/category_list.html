@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Категории | NewsHub{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <h1>Категории</h1>
+    <p><a href="{% url 'catalog:category_create' %}">Добави категория</a></p>
+
+    {% for category in categories %}
+        <p><strong>{{ category.name }}</strong></p>
+        {% if category.description %}
+            <p>{{ category.description }}</p>
+        {% endif %}
+    {% empty %}
+        <p>Все още няма категории.</p>
+    {% endfor %}
+</section>
+{% endblock %}

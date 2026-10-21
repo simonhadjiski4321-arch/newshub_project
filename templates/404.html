@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Страницата не е намерена | NewsHub{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <h1>Страницата не е намерена</h1>
+    <p>Възможно е адресът да е грешен или страницата вече да не съществува.</p>
+    <p><a href="{% url 'news:article_list' %}">Към всички новини</a></p>
+</section>
+{% endblock %}

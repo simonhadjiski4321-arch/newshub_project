@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Добави категория | NewsHub{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <h1>Добави категория</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Запази категорията</button>
+    </form>
+</section>
+{% endblock %}

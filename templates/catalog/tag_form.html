@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Добави таг | NewsHub{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <h1>Добави таг</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Запази тага</button>
+    </form>
+</section>
+{% endblock %}

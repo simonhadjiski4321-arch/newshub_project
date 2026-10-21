@@ -11,6 +11,8 @@ from django.db.models import Q
 
 from comments.models import Comment
 
+from django.core.paginator import Paginator
+
 
 def article_list(request):
     articles = Article.objects.all().order_by("-created_at")
@@ -29,18 +31,23 @@ def article_list(request):
 
     if query:
         articles = articles.filter(
-            Q(title__icontains=query) |
-            Q(content__icontains=query)
+            Q(title__icontains=query) | Q(content__icontains=query)
         )
+
+    paginator = Paginator(articles, 5)
+    page_obj = paginator.get_page(request.GET.get("page"))
 
     return render(
         request,
         "news/article_list.html",
         {
-            "articles": articles,
+            "articles": page_obj,
+            "page_obj": page_obj,
             "categories": categories,
             "tags": tags,
             "query": query,
+            "current_category": category_id,
+            "current_tag": tag_id,
         },
     )
 
