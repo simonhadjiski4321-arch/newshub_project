@@ -8,18 +8,13 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <header>
-        <a class="brand" href="{% url 'news:article_list' %}">NewsHub</a>
-        <a href="{% url 'news:article_list' %}">Новини</a>
-        <a href="{% url 'news:article_create' %}">Добави новина</a>
-        <a href="{% url 'catalog:category_list' %}">Категории</a>
-        <a href="{% url 'catalog:tag_list' %}">Тагове</a>
-    </header>
+
+   {% include "partials/header.html" %}
 
     <main>
         {% block content %}{% endblock %}
     </main>
 
-    <footer>NewsHub</footer>
+    {% include "partials/footer.html" %}
 </body>
 </html>

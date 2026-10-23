@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load news_extras %}
+
 {% block title %}{{ article.title }} | NewsHub{% endblock %}
 
 {% block content %}
@@ -11,6 +13,8 @@
     <p>Категория: {{ article.category.name }}</p>
     <p>{{ article.created_at|date:"d.m.Y H:i" }}</p>
     <div>{{ article.content|linebreaks }}</div>
+
+    <p>Брой думи: {{ article.content|word_count }}</p>
 
     <p>
         Тагове:
