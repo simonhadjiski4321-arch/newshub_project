@@ -8,6 +8,12 @@ class Article(models.Model):
     content = models.TextField(
         verbose_name="Съдържание"
     )
+    image = models.ImageField(
+        upload_to="articles/",
+        blank=True,
+        null=True,
+        verbose_name="Изображение",
+    )
     author_name = models.CharField(
         max_length=80,
         verbose_name="Автор"

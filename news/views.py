@@ -87,7 +87,7 @@ def article_detail(request, article_id):
     )
 
 def article_create(request):
-    form = ArticleForm(request.POST or None)
+    form = ArticleForm(request.POST or None, request.FILES or None)
 
     if request.method == "POST" and form.is_valid():
         article = form.save()
@@ -105,7 +105,7 @@ def article_create(request):
 
 def article_update(request, article_id):
     article = get_object_or_404(Article, id=article_id)
-    form = ArticleForm(request.POST or None, instance=article)
+    form = ArticleForm(request.POST or None, request.FILES or None, instance=article)
 
     if request.method == "POST" and form.is_valid():
         article = form.save()

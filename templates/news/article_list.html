@@ -40,6 +40,16 @@
             </a>
         </h2>
 
+        {% if article.image %}
+             <a href="{% url 'news:article_detail' article.id %}">
+                 <img
+                     class="article-card-image"
+                     src="{{ article.image.url }}"
+                     alt="Снимка към новината: {{ article.title }}"
+                 >
+             </a>
+        {% endif %}
+
         <p>Автор: {{ article.author_name }}</p>
         <p>
             Категория:

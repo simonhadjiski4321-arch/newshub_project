@@ -13,13 +13,14 @@ class ArticleForm(forms.ModelForm):
 
     class Meta:
         model = Article
-        fields = ["title", "content", "author_name", "category", "tags"]
+        fields = ["title", "content", "author_name", "category", "tags", "image"]
         labels = {
             "title": "Заглавие",
             "content": "Съдържание",
             "author_name": "Автор",
             "category": "Категория",
             "tags": "Тагове",
+            "image": "Снимка към новината",
         }
         help_texts = {
             "title": "Въведи кратко и ясно заглавие.",
@@ -27,6 +28,7 @@ class ArticleForm(forms.ModelForm):
             "author_name": "Името може да е до 80 символа.",
             "category": "Избери категория за новината.",
             "tags": "Можеш да избереш повече от един таг.",
+            "image": "Избери изображение (JPG, PNG или WEBP). Полето не е задължително.",
         }
 
         error_messages = {
@@ -47,8 +49,9 @@ class ArticleForm(forms.ModelForm):
         }
         widgets = {
             "content": forms.Textarea(attrs={"rows": 6}),
+            "image": forms.ClearableFileInput(attrs={"accept": "image/*"}),
         }
-
+        
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

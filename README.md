@@ -20,7 +20,7 @@ NewsHub е уеб приложение за новини, създадено с 
 
 ## Стартиране в Windows PowerShell
 
-Отвори PowerShell в папката на проекта и изпълни:
+Отвори PowerShell в папката на проекта и изпълни командите поред:
 
 ```powershell
 python -m venv .venv
@@ -28,21 +28,16 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-Ако `DJANGO_SECRET_KEY` още не е зададен, създай го локално:
+Приложението стартира и без зададена променлива `DJANGO_SECRET_KEY`, като използва локален ключ по подразбиране. По желание можеш да зададеш собствен ключ в PowerShell преди стартиране:
 
 ```powershell
-if (-not $env:DJANGO_SECRET_KEY) {
-    $djangoSecret = python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
-    [Environment]::SetEnvironmentVariable("DJANGO_SECRET_KEY", $djangoSecret, "User")
-    $env:DJANGO_SECRET_KEY = $djangoSecret
-}
-```
+$env:DJANGO_SECRET_KEY = "твоят-локален-ключ"
 
-Подготви базата и стартирай приложението:
+Подготви базата данни и стартирай приложението:
 
 ```powershell
 python manage.py migrate
-python manage.py runserver
+python manage.py runserver --insecure
 ```
 
 Отвори приложението на <http://127.0.0.1:8000/>.

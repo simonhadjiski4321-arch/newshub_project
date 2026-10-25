@@ -1,4 +1,5 @@
 from django import forms
+
 from .models import Comment
 
 
@@ -9,6 +10,20 @@ class CommentForm(forms.ModelForm):
         labels = {
             "author_name": "Твоето име",
             "content": "Коментар",
+        }
+        help_texts = {
+            "author_name": "Въведи името си.",
+            "content": "Коментарът може да е до 1000 символа.",
+        }
+        error_messages = {
+            "author_name": {
+                "required": "Моля, въведи името си.",
+                "max_length": "Името може да е до 80 символа.",
+            },
+            "content": {
+                "required": "Моля, напиши коментар.",
+                "max_length": "Коментарът може да е до 1000 символа.",
+            },
         }
         widgets = {
             "author_name": forms.TextInput(
