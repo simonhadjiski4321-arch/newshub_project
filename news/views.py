@@ -134,3 +134,7 @@ def article_delete(request, article_id):
         "news/article_confirm_delete.html",
         {"article": article},
     )
+
+def article_latest(request):
+    articles = Article.objects.order_by("-created_at")[:3]
+    return render(request, "news/article_latest.html", {"articles": articles})

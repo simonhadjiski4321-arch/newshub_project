@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Последни новини | NewsHub{% endblock %}
+
+{% block content %}
+<h1>Последни новини</h1>
+
+<p>
+    <a href="{% url 'news:article_list' %}">Към всички новини</a>
+</p>
+
+{% for article in articles %}
+    <article>
+        <h2>
+            <a href="{% url 'news:article_detail' article.id %}">
+                {{ article.title }}
+            </a>
+        </h2>
+
+        {% if article.image %}
+            <a href="{% url 'news:article_detail' article.id %}">
+                <img
+                    class="article-card-image"
+                    src="{{ article.image.url }}"
+                    alt="Снимка към новината: {{ article.title }}"
+                >
+            </a>
+        {% endif %}
+
+        <p>Автор: {{ article.author_name }}</p>
+        <p>{{ article.content|truncatewords:30 }}</p>
+        <small>{{ article.created_at|date:"d.m.Y H:i" }}</small>
+    </article>
+{% empty %}
+    <p>Все още няма новини.</p>
+{% endfor %}
+{% endblock %}
