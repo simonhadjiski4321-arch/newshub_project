@@ -33,6 +33,7 @@ pip install -r requirements.txt
 
 ```powershell
 $env:DJANGO_SECRET_KEY = "твоят-локален-ключ"
+```
 
 Подготви базата данни и стартирай приложението:
 
